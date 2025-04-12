@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  orderdb:
+    image: postgres:latest
+  pgAdmin:
+    image: dpage/pgadmin4:latest
+  productdb:
+    image: redis:latest
+  kafka:
+    image: confluentinc/cp-kafka:latest
+  control-center:
+    image: confluentinc/cp-enterprise-control-center:latest
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+  order.api:
+    image: ${DOCKER_REGISTRY-}order.api:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Services/OrderApi/Dockerfile
+  product.api:
+    image: ${DOCKER_REGISTRY-}product.api:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Services/ProductApi/Dockerfile
+  orchestrator:
+    image: ${DOCKER_REGISTRY-}orchestrator:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: BuildingBlocks/Orchestrator/Dockerfile
+networks:
+  default:
+    name: microservices
+    driver: bridge
+volumes:
+    postgres_data:
+      name: postgres_data
+    redis_data:
+      name: redis_data
+    pgadmin_data:
+      name: pgadmin_data
+    kafka_data:
+      name: kafka_data
+    zookeeper_data:
+      name: zookeeper_data

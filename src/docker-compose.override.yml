@@ -1,0 +1,115 @@
+version: '3.8'
+
+services:
+  orderdb:
+    container_name: orderdb
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=123456aA@$
+      - POSTGRES_DB=PostgresDB
+    restart: always
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+  productdb:
+    container_name: productdb
+    restart: always
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+  kafka:
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - 9092:9092
+      - 9094:9094
+    volumes:
+      - kafka_data:/var/lib/kafka/data
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_LISTENERS: INTERNAL://:9092,OUTSIDE://:9094
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:9092,OUTSIDE://host.docker.internal:9094
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,OUTSIDE:PLAINTEXT
+    extra_hosts:
+      - "host.docker.internal:172.17.0.1"
+  zookeeper:
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+    restart: always
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+  control-center:
+    container_name: control-center
+    hostname: control-center
+    depends_on:
+      - kafka
+    ports:
+      - "9021:9021"
+    environment:
+      CONTROL_CENTER_BOOTSTRAP_SERVERS: 'kafka:9092'
+      CONTROL_CENTER_REPLICATION_FACTOR: 1
+      PORT: 9021
+  pgAdmin:
+    container_name: pgAdmin
+    restart: always
+    ports:
+      - "5050:80"
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=tahoanganhkhoa2014@gmail.com
+      - PGADMIN_DEFAULT_PASSWORD=123456aA@$
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+  order.api:
+    container_name: order.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - "ConnectionStrings:postgres=Server=orderdb;Port=5432;Database=PostgresDB;User Id=admin;Password=123456aA@$"
+      - "KafkaOptions:Topics:CreateOrderRequest=CREATE_ORDER.REQUEST"
+      - "KafkaOptions:ClientConfig:BootstrapServers=kafka:9092"
+    depends_on:
+      - orderdb
+      - kafka
+    ports:
+      - "5025:80"
+    restart: always
+  product.api:
+    container_name: product.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - "ConnectionStrings:redis=productdb:6379"
+      - "KafkaOptions:ConsumerGroup=OrdersOrchestrator.Group"
+      - "KafkaOptions:Topics:ChangeQuantityProductRequest=CHANGE_QUANTITY_PRODUCT.REQUEST"
+      - "KafkaOptions:Topics:ChangeQuantityProductResponse=CHANGE_QUANTITY_PRODUCT.RESPONSE"
+      - "KafkaOptions:Topics:Error=ERROR"
+      - "KafkaOptions:ClientConfig:BootstrapServers=kafka:9092"
+    depends_on:
+      - productdb
+      - kafka
+    ports:
+      - "5274:80"
+    restart: always
+  orchestrator:
+    container_name: orchestrator
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - "KafkaOptions:ConsumerGroup=OrdersOrchestrator.Group"
+      - "KafkaOptions:Topics:CreateOrderRequest=CREATE_ORDER.REQUEST"
+      - "KafkaOptions:Topics:ChangeQuantityProductRequest=CHANGE_QUANTITY_PRODUCT.REQUEST"
+      - "KafkaOptions:Topics:ChangeQuantityProductResponse=CHANGE_QUANTITY_PRODUCT.RESPONSE"
+      - "KafkaOptions:Topics:Error=ERROR"
+      - "KafkaOptions:ClientConfig:BootstrapServers=kafka:9092"
+    depends_on:
+      - kafka
+    ports:
+      - "5285:80"
+    restart: always

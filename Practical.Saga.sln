@@ -1,0 +1,53 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{3DFA376A-C911-4EFC-90E2-6C3ACB98EB18}"
+	ProjectSection(SolutionItems) = preProject
+		src\.dockerignore = src\.dockerignore
+		src\docker-compose.yml = src\docker-compose.yml
+		src\docker-compose.override.yml = src\docker-compose.override.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BuildingBlocks", "BuildingBlocks", "{09419657-52A9-4779-87DD-FD028E009367}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{3BB1C932-E652-4C43-AB2C-E5667FDCBEC8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderApi", "src\Services\OrderApi\OrderApi.csproj", "{B07EA4D2-9BC6-422B-9480-200AC3B107CE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductApi", "src\Services\ProductApi\ProductApi.csproj", "{AE298B51-9A1E-423E-91F3-F1D6A9AAFA9C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orchestrator", "src\BuildingBlocks\Orchestrator\Orchestrator.csproj", "{9049C69B-0F16-406B-B586-FF189B1BF90C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "src\BuildingBlocks\Shared\Shared.csproj", "{FA73A4FD-A852-4113-BB80-AB68E8669087}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B07EA4D2-9BC6-422B-9480-200AC3B107CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B07EA4D2-9BC6-422B-9480-200AC3B107CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B07EA4D2-9BC6-422B-9480-200AC3B107CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B07EA4D2-9BC6-422B-9480-200AC3B107CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE298B51-9A1E-423E-91F3-F1D6A9AAFA9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE298B51-9A1E-423E-91F3-F1D6A9AAFA9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE298B51-9A1E-423E-91F3-F1D6A9AAFA9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE298B51-9A1E-423E-91F3-F1D6A9AAFA9C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9049C69B-0F16-406B-B586-FF189B1BF90C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9049C69B-0F16-406B-B586-FF189B1BF90C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9049C69B-0F16-406B-B586-FF189B1BF90C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9049C69B-0F16-406B-B586-FF189B1BF90C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA73A4FD-A852-4113-BB80-AB68E8669087}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA73A4FD-A852-4113-BB80-AB68E8669087}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA73A4FD-A852-4113-BB80-AB68E8669087}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA73A4FD-A852-4113-BB80-AB68E8669087}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{09419657-52A9-4779-87DD-FD028E009367} = {3DFA376A-C911-4EFC-90E2-6C3ACB98EB18}
+		{3BB1C932-E652-4C43-AB2C-E5667FDCBEC8} = {3DFA376A-C911-4EFC-90E2-6C3ACB98EB18}
+		{B07EA4D2-9BC6-422B-9480-200AC3B107CE} = {3BB1C932-E652-4C43-AB2C-E5667FDCBEC8}
+		{AE298B51-9A1E-423E-91F3-F1D6A9AAFA9C} = {3BB1C932-E652-4C43-AB2C-E5667FDCBEC8}
+		{9049C69B-0F16-406B-B586-FF189B1BF90C} = {09419657-52A9-4779-87DD-FD028E009367}
+		{FA73A4FD-A852-4113-BB80-AB68E8669087} = {09419657-52A9-4779-87DD-FD028E009367}
+	EndGlobalSection
+EndGlobal
