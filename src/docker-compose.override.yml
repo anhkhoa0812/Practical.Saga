@@ -74,6 +74,7 @@ services:
       - "ConnectionStrings:postgres=Server=orderdb;Port=5432;Database=PostgresDB;User Id=admin;Password=123456aA@$"
       - "KafkaOptions:Topics:CreateOrderRequest=CREATE_ORDER.REQUEST"
       - "KafkaOptions:ClientConfig:BootstrapServers=kafka:9092"
+      - "GrpcSettings:StockUrl=https://localhost:7044"
     depends_on:
       - orderdb
       - kafka
@@ -112,4 +113,23 @@ services:
       - kafka
     ports:
       - "5285:80"
+    restart: always
+  payment.api:
+    container_name: payment.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - "ConnectionStrings:postgres=Server=PaymentDB;Port=5432;Database=PostgresDB;User Id=admin;Password=123456aA@$"
+      - "MoMoOptions:MomoApi=https://test-payment.momo.vn/v2/gateway/api/create"
+      - "MoMoOptions:MomoRefundEndpoint=https://test-payment.momo.vn/pay/refund"
+      - "MoMoOptions:AccessKey=M8brj9K6E22vXoDB"
+      - "MoMoOptions:SecretKey=nqQiVSgDMy809JoPF6OzP5OdBUB550Y4"
+      - "MoMoOptions:PartnerCode=MOMO5RGX20191128"
+      - "MoMoOptions:IpnUrl=https://fboothapi.azurewebsites.net/api/payment/momo/ipn"
+      - "MoMoOptions:PublicKey=<RSAKeyValue><Modulus>2XH2JFw5YakSagtabOr6Qy/GBy8tY35usAOnHZ08ahIGomMLrS7MPtxK30Foa2AKaF6z/gFqrsBF+IB8yLC7UtYUatPsCz/zzlWR5jP6+SCsjv8l0bXGzPA8O31UVPUnoFFUBfL3K5ORQ8REKjlpRe6EZpLQndVRu93V8LqjOdpp7xT+zhICB9FOEGKHmOR69v+ewubsuLAC88d5ALowopm1zx5DRA6MgBFt0SId108X2JOItJ6y3NlKJhJGC8oXNduUp5SvnlKigH75mqcgBzvA1jvWbRQwDiiIIcBvPh8UXgU8qDOh24rY6Ly0e2leMdO9nZ6aEWKox4fU8otmY2q8RpswuEA0Aq3jz6A/QXy/EoW9rIA4OjfifqhY1eCSIfDAd1/YkgU7n+gxiP21HnDfj/aw9Dj+/rLva+ohy4oWZvfYxHpiCpB8tTBfiHpGCMxik2ejf9qT0Nnx/xP10zW34JSiBX0u0ByV/Ol2X7g/tIfTGRyGIUDqj+DYmO1Tu+WjJli0KBNX0TQvdFNjnvbsLvDxTPKVNSJImpPZb/V/1f8z5fUEEvrC7TNNhuJL+j0OoI15PeFRlUsM7052EiSr08Tgh8yIt2T7Tjbms25ljfM2+glh+UvrqW9RIZm/eNkYfPRQSG3a2kV7y29xebnKX60R4rq3XWpgT2nxGIE=</Modulus><Exponent>AQAB</Exponent></RSAKeyValue>"
+      - "MoMoOptions:RedirectUrl=https://localhost:5088/api/payment/momo/return"
+    depends_on:
+      - orderdb
+    ports:
+      - "5088:80"
     restart: always

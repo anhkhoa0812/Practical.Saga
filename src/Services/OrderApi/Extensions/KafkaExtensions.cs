@@ -1,5 +1,7 @@
 using MassTransit;
 using OrderApi.Dto;
+using OrderApi.GrpcService;
+using PaymentApi.Protos;
 using Shared.Configurations;
 using Shared.Events;
 
@@ -28,6 +30,31 @@ public static class KafkaExtensions
             });
         });
         
+        return services;
+    }
+    
+    public static IServiceCollection ConfigureGrpcServices(this IServiceCollection services, IConfiguration configuration)
+    {
+        
+        var settings = configuration.GetSection("GrpcSettings")
+            .Get<GrpcSettings>();
+        if(settings == null || string.IsNullOrEmpty(settings.StockUrl))
+            throw new ArgumentNullException("Grpc is not configured.");
+
+        services.AddGrpcClient<PaymentProtoService.PaymentProtoServiceClient>(
+            x =>
+            {
+                x.Address = new Uri(settings.StockUrl);
+                x.ChannelOptionsActions.Add(channelOptions =>
+                {
+                });
+            }
+            
+                
+            
+        );
+        services.AddScoped<PaymentGrpcService>();
+
         return services;
     }
 }

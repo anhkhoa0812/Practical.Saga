@@ -8,6 +8,7 @@ COPY ["Services/OrderApi/OrderApi.csproj", "Services/OrderApi/"]
 COPY ["BuildingBlocks/Shared/Shared.csproj", "BuildingBlocks/Shared/"]
 
 RUN dotnet restore "Services/OrderApi/OrderApi.csproj"
+
 COPY . .
 WORKDIR "/src/Services/OrderApi"
 RUN dotnet build "OrderApi.csproj" -c Release -o /app/build

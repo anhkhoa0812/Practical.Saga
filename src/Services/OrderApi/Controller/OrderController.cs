@@ -14,9 +14,8 @@ public class OrderController : ControllerBase
     
     [HttpPost("api/orders")]
     public async Task<ActionResult> CreateOrder([FromBody] CreateOrderCommand command)
-    {
-        await _mediator.Send(command);
-        return Ok();
+    {   
+        return Ok(await _mediator.Send(command));
     }
     
 }

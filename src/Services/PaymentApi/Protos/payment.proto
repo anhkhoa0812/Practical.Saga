@@ -1,0 +1,18 @@
+syntax="proto3";
+
+option csharp_namespace = "PaymentApi.Protos";
+
+service PaymentProtoService {
+  rpc CreatePayment (GetPaymentUrlRequest) returns (GetPaymentUrlResponse);
+}
+
+message GetPaymentUrlRequest {
+  string orderId = 1;
+  sint64 amount = 2;
+  string transactionId = 3;
+  
+}
+
+message GetPaymentUrlResponse {
+  string url = 1;
+}

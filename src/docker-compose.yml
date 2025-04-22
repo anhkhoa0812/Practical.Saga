@@ -28,6 +28,12 @@ services:
     build:
       context: .
       dockerfile: BuildingBlocks/Orchestrator/Dockerfile
+  payment.api:
+    image: ${DOCKER_REGISTRY-}payment.api:${PLATFORM:-linux}-${TAG:-latest}
+    
+    build:
+      context: .
+      dockerfile: Services/PaymentApi/Dockerfile
 networks:
   default:
     name: microservices

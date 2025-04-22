@@ -3,8 +3,8 @@ using Shared.Events;
 
 namespace OrderApi.Commands;
 
-public class CreateOrderCommand : IRequest
+public class CreateOrderCommand : IRequest<string>
 {
     public List<ProductDto> Products { get; set; }
-    public decimal TotalPrice { get; set; }
+    public long TotalPrice { get; set; }
 }
